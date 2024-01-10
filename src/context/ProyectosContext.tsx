@@ -9,11 +9,19 @@ import { TColaborador } from '../interfaces/ColaboradorType';
 import io, { Socket } from "socket.io-client";
 import useAuth from '../hooks/useAuth';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-let socket:Socket;
+let socket: Socket;
+
+interface ErrorResponse {
+    response: {
+        data: {
+            msg: string;
+        };
+    };
+}
 
 const ProyectosContext = createContext<IProyectosContext>({} as IProyectosContext);
 const ProyectosProvider = ({ children }: IProyectosProvider) => {
-    const {auth} = useAuth()
+    const { auth } = useAuth()
     const [proyectos, setProyectos] = useState<IFProyecto[]>({} as IFProyecto[])
     const [alerta, setAlerta] = useState<IAlertData>({} as IAlertData)
     const [proyecto, setProyecto] = useState<IFProyecto>({} as IFProyecto)
@@ -25,14 +33,14 @@ const ProyectosProvider = ({ children }: IProyectosProvider) => {
     const [tarea, setTarea] = useState<TTarea>({} as TTarea)
     const [modalEliminarColaborador, setModalEliminarColaborador] = useState<boolean>(false)
     const [buscador, setBuscador] = useState<boolean>(false)
-    
+
     const navigate = useNavigate()
 
     // ESTO ES SOLO PARA ESTABLECER LA CONEXION CON SOKCET.IO LA SE EJECUTA UNA VEZ
     useEffect(() => {
-    socket = io(import.meta.env.VITE_BACKEND_URL);
+        socket = io(import.meta.env.VITE_BACKEND_URL);
     }, [])
-    
+
 
     // para llamar los poryectos que el usuario logeado ha creado.
     useEffect(() => {
@@ -165,13 +173,17 @@ const ProyectosProvider = ({ children }: IProyectosProvider) => {
             setProyecto(data.proyecto);
 
         } catch (error) {
-            navigate('/proyectos')
-            setAlerta(
-                { msg: error.response.data.msg, error: true }
-            )
-            setTimeout(() => {
-                setAlerta({} as IAlertData)
-            }, 3000);
+            if (error instanceof Error) {
+                // Manejo de errores de TypeScript reconocidos como instancias de Error
+                console.error(error.message);
+            } else {
+                const err = error as ErrorResponse;
+                navigate('/proyectos');
+                setAlerta({ msg: err.response.data.msg, error: true });
+                setTimeout(() => {
+                    setAlerta({} as IAlertData);
+                }, 3000);
+            }
         } finally {
             setCargando(false)
         }
@@ -265,7 +277,7 @@ const ProyectosProvider = ({ children }: IProyectosProvider) => {
             const { data } = await AxiosClient.put(`/tareas/${tarea._id}`, tarea, config)
 
             // SOCKET.IO
-            socket.emit('editar-tarea',data);
+            socket.emit('editar-tarea', data);
 
             setAlerta({} as IAlertData)
             setModalFormularioTarea(false)
@@ -303,10 +315,10 @@ const ProyectosProvider = ({ children }: IProyectosProvider) => {
                 msg: data.msg,
                 error: false
             })
-            
+
 
             // SOCKET.IO
-            socket.emit('eliminar-tarea',tarea);
+            socket.emit('eliminar-tarea', tarea);
 
             setModalEliminarTarea(false)
             setTarea({} as TTarea)
@@ -336,8 +348,19 @@ const ProyectosProvider = ({ children }: IProyectosProvider) => {
             setColaborador(data)
             setAlerta({} as IAlertData)
         } catch (error) {
-            setAlerta({ msg: error.response.data.msg, error: true });
-            setColaborador({} as TColaborador)
+
+            if (error instanceof Error) {
+                // Manejo de errores de TypeScript reconocidos como instancias de Error
+                console.error(error.message);
+            } else {
+                const err = error as ErrorResponse;
+                setAlerta({ msg: err.response.data.msg, error: true });
+                setColaborador({} as TColaborador)
+                setTimeout(() => {
+                    setAlerta({} as IAlertData);
+                }, 3000);
+            }
+
         } finally {
             setCargandoColaborador(false)
         }
@@ -361,11 +384,18 @@ const ProyectosProvider = ({ children }: IProyectosProvider) => {
             })
             setColaborador({} as TColaborador)
         } catch (error) {
-            console.log(error.response);
-            setAlerta({
-                msg: error.response.data.msg,
-                error: true
-            })
+            if (error instanceof Error) {
+                // Manejo de errores de TypeScript reconocidos como instancias de Error
+                console.error(error.message);
+            } else {
+                const err = error as ErrorResponse;
+                setAlerta({ msg: err.response.data.msg, error: true });
+                setTimeout(() => {
+                    setAlerta({} as IAlertData);
+                }, 3000);
+            }
+
+            
         }
     }
 
@@ -425,7 +455,7 @@ const ProyectosProvider = ({ children }: IProyectosProvider) => {
             const { data } = await AxiosClient.post(`tareas/estado/${id}`, {}, config);
 
             // SOCKET.IO
-            socket.emit('completar-tarea',data);
+            socket.emit('completar-tarea', data);
 
             setTarea({} as TTarea)
             setAlerta({} as IAlertData)
@@ -437,41 +467,41 @@ const ProyectosProvider = ({ children }: IProyectosProvider) => {
 
     }
 
-    const handleBuscador = ()=>{
+    const handleBuscador = () => {
         setBuscador(!buscador)
     }
 
-    const cerrarSesionProyectos = ()=>{
+    const cerrarSesionProyectos = () => {
         setProyectos({} as IFProyecto[])
         setProyecto({} as IFProyecto)
         setAlerta({} as IAlertData)
     }
 
     // SOCKET.IO
-    const submitTareasProyectos = (tarea:TTarea) =>{
-            // creo una nueva const con el proyecto actual para poder cargarle las tareas
-            const proyectoActualizado = { ...proyecto }
-            proyectoActualizado.tareas = [...proyectoActualizado.tareas, tarea]
-            // cargo al state de proyecto , el proyectoActualizado con las tareas
-            setProyecto(proyectoActualizado)
+    const submitTareasProyectos = (tarea: TTarea) => {
+        // creo una nueva const con el proyecto actual para poder cargarle las tareas
+        const proyectoActualizado = { ...proyecto }
+        proyectoActualizado.tareas = [...proyectoActualizado.tareas, tarea]
+        // cargo al state de proyecto , el proyectoActualizado con las tareas
+        setProyecto(proyectoActualizado)
     }
 
-    const deleteTareasProyectos = (tarea:TTarea)=>{
+    const deleteTareasProyectos = (tarea: TTarea) => {
         const proyectoActualizado = { ...proyecto };
-            proyectoActualizado.tareas = proyectoActualizado.tareas.filter(tareaState => tareaState._id !== tarea._id)
-            setProyecto(proyectoActualizado);
+        proyectoActualizado.tareas = proyectoActualizado.tareas.filter(tareaState => tareaState._id !== tarea._id)
+        setProyecto(proyectoActualizado);
     }
 
-    const editarTareasProyectos = (tareaEdit:TTarea)=>{
+    const editarTareasProyectos = (tareaEdit: TTarea) => {
         const proyectoActualizado = { ...proyecto };
         proyectoActualizado.tareas = proyectoActualizado.tareas.map(tareaState => tareaState._id === tareaEdit._id ? tareaEdit : tareaState);
         setProyecto(proyectoActualizado)
     }
 
-    const completarTareasProyectos = (tarea:TTarea) =>{
+    const completarTareasProyectos = (tarea: TTarea) => {
         const proyectoActualizado = { ...proyecto }
-            proyectoActualizado.tareas = proyectoActualizado.tareas.map(tareaState => tareaState._id === tarea._id ? tarea : tareaState)
-            setProyecto(proyectoActualizado)
+        proyectoActualizado.tareas = proyectoActualizado.tareas.map(tareaState => tareaState._id === tarea._id ? tarea : tareaState)
+        setProyecto(proyectoActualizado)
     }
 
     return (

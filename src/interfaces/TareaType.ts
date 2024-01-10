@@ -8,5 +8,5 @@ export type TTarea = {
     fechaEntrega: string;
     prioridad:string;
     proyecto:string | IFProyecto;
-    completado:{nombre:string};
+    completado?:{nombre:string};
 }
