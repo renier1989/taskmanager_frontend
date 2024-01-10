@@ -8,16 +8,11 @@ import { TTarea } from '../interfaces/TareaType';
 import { TColaborador } from '../interfaces/ColaboradorType';
 import io, { Socket } from "socket.io-client";
 import useAuth from '../hooks/useAuth';
+import { IErrorResponse } from '../interfaces/IErrorrResponse';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 let socket: Socket;
 
-interface ErrorResponse {
-    response: {
-        data: {
-            msg: string;
-        };
-    };
-}
+
 
 const ProyectosContext = createContext<IProyectosContext>({} as IProyectosContext);
 const ProyectosProvider = ({ children }: IProyectosProvider) => {
@@ -177,7 +172,7 @@ const ProyectosProvider = ({ children }: IProyectosProvider) => {
                 // Manejo de errores de TypeScript reconocidos como instancias de Error
                 console.error(error.message);
             } else {
-                const err = error as ErrorResponse;
+                const err = error as IErrorResponse;
                 navigate('/proyectos');
                 setAlerta({ msg: err.response.data.msg, error: true });
                 setTimeout(() => {
@@ -353,7 +348,7 @@ const ProyectosProvider = ({ children }: IProyectosProvider) => {
                 // Manejo de errores de TypeScript reconocidos como instancias de Error
                 console.error(error.message);
             } else {
-                const err = error as ErrorResponse;
+                const err = error as IErrorResponse;
                 setAlerta({ msg: err.response.data.msg, error: true });
                 setColaborador({} as TColaborador)
                 setTimeout(() => {
@@ -388,7 +383,7 @@ const ProyectosProvider = ({ children }: IProyectosProvider) => {
                 // Manejo de errores de TypeScript reconocidos como instancias de Error
                 console.error(error.message);
             } else {
-                const err = error as ErrorResponse;
+                const err = error as IErrorResponse;
                 setAlerta({ msg: err.response.data.msg, error: true });
                 setTimeout(() => {
                     setAlerta({} as IAlertData);

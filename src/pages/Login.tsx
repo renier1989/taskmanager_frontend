@@ -4,6 +4,7 @@ import { IAlertData } from "../interfaces/IAlertData";
 import Alerta from "../components/Alerta";
 import AxiosClient from "../config/AxiosClient";
 import useAuth from "../hooks/useAuth";
+import { IErrorResponse } from "../interfaces/IErrorrResponse";
 // import useAuth from "../hooks/useAuth";
 
 
@@ -38,10 +39,11 @@ const Login = () => {
       localStorage.setItem('token',data.token);
 
     } catch (error) {
-      setAlerta({
-        msg: error.response.data.msg,
-        error: true
-      })
+      const err = error as IErrorResponse;
+          setAlerta({ msg: err.response.data.msg, error: true });
+          setTimeout(() => {
+              setAlerta({} as IAlertData);
+          }, 3000);
     }
 
 

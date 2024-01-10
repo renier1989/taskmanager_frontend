@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom"
 import Alerta from "../components/Alerta";
 import { IAlertData } from "../interfaces/IAlertData";
 import AxiosClient from "../config/AxiosClient";
+import { IErrorResponse } from "../interfaces/IErrorrResponse";
 
 
 const ConfirmarCuenta = () => {
@@ -27,11 +28,17 @@ const ConfirmarCuenta = () => {
         setCuentaConfirmada(true);
 
       } catch (error) {
-        setAlerta({
-          msg: error.response.data.msg,
-          error: true
-        })
 
+        if (error instanceof Error) {
+          // Manejo de errores de TypeScript reconocidos como instancias de Error
+          console.error(error.message);
+      } else {
+          const err = error as IErrorResponse;
+          setAlerta({ msg: err.response.data.msg, error: true });
+          setTimeout(() => {
+              setAlerta({} as IAlertData);
+          }, 3000);
+      }
       }
     }
     return () => { confirmarToken() }

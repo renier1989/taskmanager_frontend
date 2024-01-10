@@ -3,6 +3,7 @@ import { IAlertData } from '../interfaces/IAlertData';
 import { Link, useParams } from "react-router-dom";
 import Alerta from "../components/Alerta";
 import AxiosClient from "../config/AxiosClient";
+import { IErrorResponse } from "../interfaces/IErrorrResponse";
 
 
 
@@ -24,10 +25,11 @@ const NuevaPassword = () => {
         await AxiosClient(backend_url);
         setTokenValido(true);
       } catch (error) {
-        setAlerta({
-          msg: error.response.data.msg,
-          error: true
-        })
+        const err = error as IErrorResponse;
+          setAlerta({ msg: err.response.data.msg, error: true });
+          setTimeout(() => {
+              setAlerta({} as IAlertData);
+          }, 3000);
       }
     }
 
@@ -66,10 +68,11 @@ const NuevaPassword = () => {
       })
 
     } catch (error) {
-      setAlerta({
-        msg: error.response.data.msg,
-        error: true
-      })
+      const err = error as IErrorResponse;
+          setAlerta({ msg: err.response.data.msg, error: true });
+          setTimeout(() => {
+              setAlerta({} as IAlertData);
+          }, 3000);
     }
 
 
