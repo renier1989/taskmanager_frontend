@@ -4,7 +4,7 @@ import useProyecto from '../hooks/useProyectos'
 import { IFProyecto } from '../interfaces/IProyectos';
 
 
-function classNames(...classes) {
+function classNames(...classes: (string | boolean)[]) {
     return classes.filter(Boolean).join(' ')
 }
 
@@ -42,7 +42,11 @@ const Busqueda = () => {
                     <Combobox
                         as="div"
                         className="mx-auto max-w-xl transform divide-y divide-gray-100 overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-black ring-opacity-5 transition-all"
-                        onChange={(proyecto) => (window.location = `/proyectos/${proyecto?._id}`)}
+                        onChange={(proyecto:{_id?: string}) =>{ 
+                            if(proyecto){
+                                window.location.href = `/proyectos/${proyecto._id}`
+                            }
+                        }}
                     >
                         <div className="relative">
                             <Combobox.Input
