@@ -1,30 +1,80 @@
-# React + TypeScript + Vite
+# TaskManager
+Practica Fulltack desarrollada con :  RactJs + Express + MongoDB + Typescript + Socket.io y más..
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![main1](https://raw.githubusercontent.com/renier1989/taskmanager_frontend/main/src/assets/main1.jpg)
+![main1](https://raw.githubusercontent.com/renier1989/taskmanager_frontend/main/src/assets/main2.jpg)
 
-Currently, two official plugins are available:
+# Descripción
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Este es un proyecto Fullstack, con el que podrás registrarte, confirmar tu cuenta y recuperar tu contraseña. Podrás iniciar sesión con tu usuario son Autenticación JWT y administrar tus proyectos y completar tareas. También podrás colaborar en otros proyectos de otros usuarios completando tareas o también podrás agregar colaboradores a tus proyectos. Como ultima funcionalidad también podrás hacer todos estos procesos en Tiempo real gracias a Socket.io, cuando crear, editar, completas o actualizas tareas, tus colaboradores podrás ver en tiempo real estos procesos y viceversa.
 
-## Expanding the ESLint configuration
+### Características:
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- Registro de nuevos usuarios
+- Confirmar tu cuenta
+- Recuperar Contraseña
+- inicio de Sesión con JWT
+- Administras tu Proyectos
+- CRUD de tareas en los proyectos
+- Añadir Colaboradores a tus proyectos
+- Colaborar en proyectos de otros usuarios
+- CRUD de Tares en Tiempo real (Socket.io)
 
-- Configure the top-level `parserOptions` property like this:
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+# Demo
+
+Puedes darle un vistazo al proyecto en ejecución [aqui](https://taskmanager-frontend-renier1989.vercel.app/)
+
+#### Notas: 
+El proyecto cuenta con envío de correos para algunas proceso de registro, confirmación y recuperación de contraseña, estos proceso de envío de correo los desarrollo con [Nodemailer](https://nodemailer.com/) usando [MailTrap.io](https://mailtrap.io/) para hacer las pruebas respectivas en el entorno local.
+
+Si deseas probar las funcionalidades de la aplicación puedes ingresar con estos usuarios de prueba:
+
+```bash
+  USUARIOS DE PRUEBA:
+  Email :     user1@test.com    |    Email :     user2@test.com
+  Password :  user1@test.com    |    Password :  user2@test.com
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+
+
+# Tecnologías
+
+**Frontend:** React, Typscript, TailwindCSS, Context Api, Socket.io(client), React-rouet-dom, Axios, HeadlessUi, Vite.
+
+**Backend:** NodeJs, Express, MongoDB, Typescript, Socket.io, JWT.
+
+
+# ⚙ Instalación
+
+Necesitas Node.js (^18) y Vite.js(^5)
+
+Clona el repositorio con (https):
+```
+git clone https://github.com/renier1989/taskmanager_frontend.git 
+```
+Cambia el nombre al archivo .env-example a .env y asegurate de contar con las variables de entorno: (por ejemplo para tu entorno local), para conectarte con el backend
+```
+VITE_BACKEND_URL=http://localhost:4000
+```
+move to the project folder and Run:
+```bash
+  cd taskmanager_frontend
+  npm install or npm i
+  npm run dev
+```
+    
+# Instalación del Backend
+
+para la instalación del Backend puedes ingresar al siguiente repositorio y seguir los pasos de instalación:
+
+[https://github.com/renier1989/taskmanager_backend.git](https://github.com/renier1989/taskmanager_backend.git)
+
+
+
+
+
+
+# 💻 About Me
+Soy Fullstack Developer,
+Puedes conocerme ingresando a mi pagina web personal [🔗](http://reniervargas.com/)
