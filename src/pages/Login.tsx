@@ -9,8 +9,8 @@ import { IErrorResponse } from "../interfaces/IErrorrResponse";
 
 
 const Login = () => {
-  
-  const {setAuth} = useAuth()
+
+  const { setAuth } = useAuth()
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -36,14 +36,14 @@ const Login = () => {
         error: false
       })
 
-      localStorage.setItem('token',data.token);
+      localStorage.setItem('token', data.token);
 
     } catch (error) {
       const err = error as IErrorResponse;
-          setAlerta({ msg: err.response.data.msg, error: true });
-          setTimeout(() => {
-              setAlerta({} as IAlertData);
-          }, 3000);
+      setAlerta({ msg: err.response.data.msg, error: true });
+      setTimeout(() => {
+        setAlerta({} as IAlertData);
+      }, 3000);
     }
 
 
@@ -56,6 +56,23 @@ const Login = () => {
       </h1>
       {msg && <Alerta alerta={alerta} />}
       <form onSubmit={handleSubmit} className="mt-20 bg-white rounded-lg shadow p-10">
+        <div className="bg-slate-50 px-2 py-1 rounded shadow-md text-sm">
+          <code>
+            <p className="text-black font-semibold">
+              Usuarios de prueba:
+            </p>
+            <div className="flex justify-between w-full">
+              <div className="border-r-2 w-full">
+              <p>Email: user1@test.com</p>
+              <p>Passw: user1@test.com</p>
+              </div>
+              <div className="w-full text-end">
+              <p>Email: user2@test.com</p>
+              <p>Passw: user2@test.com</p>
+              </div>
+            </div>
+          </code>
+        </div>
         <div className="my-5">
           <label className="block uppercase text-gray-600 text-xl font-bold" htmlFor="email">Email</label>
           <input value={email} onChange={e => setEmail(e.target.value)} id="email" autoComplete="off" type="email" placeholder="Email de usuario" className="w-full border p-3 mt-5 rounded-xl bg-gray-50" autoFocus />
